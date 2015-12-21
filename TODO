@@ -1,0 +1,16 @@
+This file serves as a short-term roadmap for the project.
+It will be updated regularly as new features are planned and implemented.
+
+
+Upcoming Features
+=================
++ Control a rectangle with the arrow keys
++ Control a worm with the arrow keys
++ Add boundaries so worm cannot go off screen
++ Add collision detection for worm body
++ Add apples to grow worm
+
+
+Implemented
+===========
+2015-12-21 - Display an empty window
