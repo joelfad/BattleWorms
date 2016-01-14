@@ -31,25 +31,27 @@ Usage Agreement:
 #define BATTLEWORMS_WORM_HPP
 
 #include <SFML/Graphics.hpp>
+#include <deque>
+#include "Constants.hpp"
 
 
-class Worm {
+class Worm : public sf::Sprite {
 public:
     Worm();
+    void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
 private:
-    struct Segment : public sf::Sprite {
-        enum class Direction { up, down, right, left };
+    struct Segment : public sf::RectangleShape {
+        Segment(float startX, float startY, Direction dir);
         Direction dir_;
-        sf::Vector2u location_;
-        unsigned length_;
-        Segment* next_;
+        float length_;
     };
 
 private:
-    Segment* head_;
-    Segment* tail_;
-
+    using SegPtr = std::unique_ptr<Segment>;
+    std::deque<SegPtr> segments_;
+    static constexpr float width_ = 10.0;
+    static const sf::Color color_;
 };
 
 

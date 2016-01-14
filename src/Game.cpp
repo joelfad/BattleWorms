@@ -28,7 +28,6 @@ Usage Agreement:
 */
 
 #include "Game.hpp"
-#include "Constants.hpp"
 
 
 Game::Game() : window_(sf::VideoMode(windowWidth_, windowHeight_), "BattleWorms"), player_{}, score_{0}
@@ -75,5 +74,6 @@ void Game::render()
 {
     window_.clear();
     window_.draw(background_);
+    window_.draw(player_);
     window_.display();
 }
