@@ -1,14 +1,14 @@
 /*
 Project: BattleWorms
-File: constants.hpp
+File: Worm.hpp
 Author: Joel McFadden
-Created: December 21, 2015
-Last Modified: December 21, 2015
+Created: January 14, 2016
+Last Modified: January 14, 2016
 
 Description:
     A remake of the classic game "Nibbles" with new features.
 
-Copyright (C) 2015 Joel McFadden
+Copyright (C) 2016 Joel McFadden
 
 Usage Agreement:
     This file is part of BattleWorms.
@@ -27,11 +27,30 @@ Usage Agreement:
     along with BattleWorms.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef BATTLEWORMS_CONSTANTS_HPP
-#define BATTLEWORMS_CONSTANTS_HPP
+#ifndef BATTLEWORMS_WORM_HPP
+#define BATTLEWORMS_WORM_HPP
 
-namespace Color {
-    sf::Color backgroundBlue{0x00, 0x00, 0xA8, 0xFF};
-}
+#include <SFML/Graphics.hpp>
 
-#endif //BATTLEWORMS_CONSTANTS_HPP
+
+class Worm {
+public:
+    Worm();
+
+private:
+    struct Segment : public sf::Sprite {
+        enum class Direction { up, down, right, left };
+        Direction dir_;
+        sf::Vector2u location_;
+        unsigned length_;
+        Segment* next_;
+    };
+
+private:
+    Segment* head_;
+    Segment* tail_;
+
+};
+
+
+#endif //BATTLEWORMS_WORM_HPP

@@ -1,14 +1,14 @@
 /*
 Project: BattleWorms
-File: game.cpp
+File: Game.cpp
 Author: Joel McFadden
 Created: December 21, 2015
-Last Modified: December 21, 2015
+Last Modified: January 14, 2016
 
 Description:
     A remake of the classic game "Nibbles" with new features.
 
-Copyright (C) 2015 Joel McFadden
+Copyright (C) 2016 Joel McFadden
 
 Usage Agreement:
     This file is part of BattleWorms.
@@ -27,12 +27,23 @@ Usage Agreement:
     along with BattleWorms.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "game.hpp"
-#include "constants.hpp"
+#include "Game.hpp"
+#include "Constants.hpp"
 
 
-Game::Game() : window_(sf::VideoMode(640, 480), "BattleWorms")
+Game::Game() : window_(sf::VideoMode(windowWidth_, windowHeight_), "BattleWorms"), player_{}, score_{0}
 {
+    // limit the framerate
+    window_.setFramerateLimit(fps_);
+    // TODO: Use fixed time steps for more accuracy
+
+    // load background texture into sprite
+    if (!backgroundTile_.loadFromFile("res/img/background_tile.png"))
+        throw new std::runtime_error("Unable to load background texture.");
+        // TODO: Catch this runtime error
+    backgroundTile_.setRepeated(true);
+    background_.setTexture(backgroundTile_);
+    background_.setTextureRect(sf::IntRect(0, 0, windowWidth_, windowHeight_));
 }
 
 void Game::run()
@@ -62,6 +73,7 @@ void Game::update()
 
 void Game::render()
 {
-    window_.clear(Color::backgroundBlue);
+    window_.clear();
+    window_.draw(background_);
     window_.display();
 }

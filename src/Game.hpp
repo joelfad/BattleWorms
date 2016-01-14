@@ -1,8 +1,8 @@
 /*
 Project: BattleWorms
-File: main.cpp
+File: Game.hpp
 Author: Joel McFadden
-Created: December 20, 2015
+Created: December 21, 2015
 Last Modified: January 14, 2016
 
 Description:
@@ -27,13 +27,33 @@ Usage Agreement:
     along with BattleWorms.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "Game.hpp"
+#ifndef BATTLEWORMS_GAME_HPP
+#define BATTLEWORMS_GAME_HPP
+
+#include <SFML/Graphics.hpp>
+#include "Worm.hpp"
 
 
-int main()
-{
-    Game game;
-    game.run();
+class Game {
+public:
+    Game();
+    void run();
 
-    return 0;
-}
+private:
+    void processEvents();
+    void update();
+    void render();
+
+private:
+    sf::RenderWindow window_;
+    sf::Texture backgroundTile_;
+    sf::Sprite background_;
+    Worm player_;
+    unsigned score_;    // TODO: Track and display score
+    static constexpr unsigned windowWidth_ = 640;
+    static constexpr unsigned windowHeight_ = 480;
+    static constexpr unsigned fps_ = 60;
+};
+
+
+#endif //BATTLEWORMS_GAME_HPP

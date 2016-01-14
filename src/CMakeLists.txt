@@ -1,7 +1,8 @@
 #source files
 set(SOURCE_FILES
-        game.cpp
         main.cpp
+        Game.cpp
+        Worm.cpp
 )
 
 #find SFML library

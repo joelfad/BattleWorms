@@ -2,7 +2,7 @@
 
 BattleWorms is a remake of the classic game "Nibbles" with new features.
 
-<img src="/img/screenshot.png" width="640" alt="Screenshot">
+<img src="/res/img/screenshot.png" width="640" alt="Screenshot">
 
 ## Dependencies
 SFML (Simple and Fast Media Library) must be installed in order to compile and run BattleWorms.

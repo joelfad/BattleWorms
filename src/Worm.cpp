@@ -1,8 +1,8 @@
 /*
 Project: BattleWorms
-File: main.cpp
+File: Worm.cpp
 Author: Joel McFadden
-Created: December 20, 2015
+Created: January 14, 2016
 Last Modified: January 14, 2016
 
 Description:
@@ -27,13 +27,9 @@ Usage Agreement:
     along with BattleWorms.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "Game.hpp"
+#include "Worm.hpp"
 
 
-int main()
+Worm::Worm()
 {
-    Game game;
-    game.run();
-
-    return 0;
 }
