@@ -43,6 +43,7 @@ private:
     void processEvents();
     void update();
     void render();
+    void handlePlayerInput(sf::Keyboard::Key key);
 
 private:
     sf::RenderWindow window_;
@@ -50,6 +51,7 @@ private:
     sf::Sprite background_;
     Worm player_;
     unsigned score_;    // TODO: Track and display score
+    bool keyReleased_;  // ensures that each key press only triggers one event
     static constexpr unsigned windowWidth_ = 640;
     static constexpr unsigned windowHeight_ = 480;
     static constexpr unsigned fps_ = 60;

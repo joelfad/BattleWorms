@@ -39,17 +39,22 @@ class Worm : public sf::Sprite {
 public:
     Worm();
     void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+    void changeDirection(Direction dir);
+    void move();
+    // TODO: Document functions
 
 private:
     struct Segment : public sf::RectangleShape {
         Segment(float startX, float startY, Direction dir);
+        void move(float offset);
+        void resize(float amount);
         Direction dir_;
-        float length_;
     };
 
 private:
     using SegPtr = std::unique_ptr<Segment>;
     std::deque<SegPtr> segments_;
+    float speed_ = 5.0;  // amount to move head and tail by each frame
     static constexpr float width_ = 10.0;
     static const sf::Color color_;
 };

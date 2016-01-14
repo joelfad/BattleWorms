@@ -38,6 +38,6 @@ namespace Color {
     const sf::Color wordWhite{0xFC, 0xFC, 0xFC, 0xFF};
 }
 
-enum class Direction { up, down, right, left };
+enum class Direction { right, down, left, up };
 
 #endif //BATTLEWORMS_CONSTANTS_HPP

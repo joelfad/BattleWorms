@@ -30,7 +30,8 @@ Usage Agreement:
 #include "Game.hpp"
 
 
-Game::Game() : window_(sf::VideoMode(windowWidth_, windowHeight_), "BattleWorms"), player_{}, score_{0}
+Game::Game() : window_(sf::VideoMode(windowWidth_, windowHeight_), "BattleWorms"), player_{}, score_{0},
+               keyReleased_{true}
 {
     // limit the framerate
     window_.setFramerateLimit(fps_);
@@ -60,14 +61,25 @@ void Game::processEvents()
     sf::Event event;
     while (window_.pollEvent(event)) {
         switch (event.type) {
+            case sf::Event::KeyPressed:
+                if (keyReleased_) {
+                    keyReleased_ = false;
+                    handlePlayerInput(event.key.code);
+                }
+                break;
+            case sf::Event::KeyReleased:
+                keyReleased_ = true;
+                break;
             case sf::Event::Closed:
                 window_.close();
+                break;
         }
     }
 }
 
 void Game::update()
 {
+    player_.move();
 }
 
 void Game::render()
@@ -76,4 +88,22 @@ void Game::render()
     window_.draw(background_);
     window_.draw(player_);
     window_.display();
+}
+
+void Game::handlePlayerInput(sf::Keyboard::Key key)
+{
+    switch(key) {
+        case sf::Keyboard::Up:
+            player_.changeDirection(Direction::up);
+            break;
+        case sf::Keyboard::Down:
+            player_.changeDirection(Direction::down);
+            break;
+        case sf::Keyboard::Right:
+            player_.changeDirection(Direction::right);
+            break;
+        case sf::Keyboard::Left:
+            player_.changeDirection(Direction::left);
+            break;
+    }
 }
