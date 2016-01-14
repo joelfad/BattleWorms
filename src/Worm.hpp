@@ -1,14 +1,14 @@
 /*
 Project: BattleWorms
-File: game.hpp
+File: Worm.hpp
 Author: Joel McFadden
-Created: December 21, 2015
-Last Modified: December 21, 2015
+Created: January 14, 2016
+Last Modified: January 14, 2016
 
 Description:
     A remake of the classic game "Nibbles" with new features.
 
-Copyright (C) 2015 Joel McFadden
+Copyright (C) 2016 Joel McFadden
 
 Usage Agreement:
     This file is part of BattleWorms.
@@ -27,25 +27,37 @@ Usage Agreement:
     along with BattleWorms.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef BATTLEWORMS_GAME_HPP
-#define BATTLEWORMS_GAME_HPP
+#ifndef BATTLEWORMS_WORM_HPP
+#define BATTLEWORMS_WORM_HPP
 
 #include <SFML/Graphics.hpp>
+#include <deque>
+#include "Constants.hpp"
 
 
-class Game {
+class Worm : public sf::Sprite {
 public:
-    Game();
-    void run();
+    Worm();
+    void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+    void changeDirection(Direction dir);
+    void move();
+    // TODO: Document functions
 
 private:
-    void processEvents();
-    void update();
-    void render();
+    struct Segment : public sf::RectangleShape {
+        Segment(float startX, float startY, Direction dir);
+        void move(float offset);
+        void resize(float amount);
+        Direction dir_;
+    };
 
 private:
-    sf::RenderWindow window_;
+    using SegPtr = std::unique_ptr<Segment>;
+    std::deque<SegPtr> segments_;
+    float speed_ = 5.0;  // amount to move head and tail by each frame
+    static constexpr float width_ = 10.0;
+    static const sf::Color color_;
 };
 
 
-#endif //BATTLEWORMS_GAME_HPP
+#endif //BATTLEWORMS_WORM_HPP

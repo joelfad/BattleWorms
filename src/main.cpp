@@ -3,12 +3,12 @@ Project: BattleWorms
 File: main.cpp
 Author: Joel McFadden
 Created: December 20, 2015
-Last Modified: December 21, 2015
+Last Modified: January 14, 2016
 
 Description:
     A remake of the classic game "Nibbles" with new features.
 
-Copyright (C) 2015 Joel McFadden
+Copyright (C) 2016 Joel McFadden
 
 Usage Agreement:
     This file is part of BattleWorms.
@@ -27,7 +27,8 @@ Usage Agreement:
     along with BattleWorms.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "game.hpp"
+#include "Game.hpp"
+
 
 int main()
 {

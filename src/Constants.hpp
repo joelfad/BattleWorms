@@ -1,14 +1,14 @@
 /*
 Project: BattleWorms
-File: game.cpp
+File: Constants.hpp
 Author: Joel McFadden
 Created: December 21, 2015
-Last Modified: December 21, 2015
+Last Modified: January 14, 2016
 
 Description:
     A remake of the classic game "Nibbles" with new features.
 
-Copyright (C) 2015 Joel McFadden
+Copyright (C) 2016 Joel McFadden
 
 Usage Agreement:
     This file is part of BattleWorms.
@@ -27,41 +27,17 @@ Usage Agreement:
     along with BattleWorms.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "game.hpp"
-#include "constants.hpp"
+#ifndef BATTLEWORMS_CONSTANTS_HPP
+#define BATTLEWORMS_CONSTANTS_HPP
 
 
-Game::Game() : window_(sf::VideoMode(640, 480), "BattleWorms")
-{
+namespace Color {
+    const sf::Color backgroundBlue{0x00, 0x00, 0xA8, 0xFF};
+    const sf::Color wormYellow{0xFC, 0xFC, 0x54, 0xFF};
+    const sf::Color wallRed{0xFC, 0x54, 0x54, 0xFF};
+    const sf::Color wordWhite{0xFC, 0xFC, 0xFC, 0xFF};
 }
 
-void Game::run()
-{
-    // one iteration of this loop is a single frame (or tick)
-    while (window_.isOpen()) {
-        processEvents();
-        update();
-        render();
-    }
-}
+enum class Direction { right, down, left, up };
 
-void Game::processEvents()
-{
-    sf::Event event;
-    while (window_.pollEvent(event)) {
-        switch (event.type) {
-            case sf::Event::Closed:
-                window_.close();
-        }
-    }
-}
-
-void Game::update()
-{
-}
-
-void Game::render()
-{
-    window_.clear(Color::backgroundBlue);
-    window_.display();
-}
+#endif //BATTLEWORMS_CONSTANTS_HPP

@@ -1,14 +1,14 @@
 /*
 Project: BattleWorms
-File: constants.hpp
+File: Game.hpp
 Author: Joel McFadden
 Created: December 21, 2015
-Last Modified: December 21, 2015
+Last Modified: January 14, 2016
 
 Description:
     A remake of the classic game "Nibbles" with new features.
 
-Copyright (C) 2015 Joel McFadden
+Copyright (C) 2016 Joel McFadden
 
 Usage Agreement:
     This file is part of BattleWorms.
@@ -27,11 +27,35 @@ Usage Agreement:
     along with BattleWorms.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef BATTLEWORMS_CONSTANTS_HPP
-#define BATTLEWORMS_CONSTANTS_HPP
+#ifndef BATTLEWORMS_GAME_HPP
+#define BATTLEWORMS_GAME_HPP
 
-namespace Color {
-    sf::Color backgroundBlue{0x00, 0x00, 0xA8, 0xFF};
-}
+#include <SFML/Graphics.hpp>
+#include "Worm.hpp"
 
-#endif //BATTLEWORMS_CONSTANTS_HPP
+
+class Game {
+public:
+    Game();
+    void run();
+
+private:
+    void processEvents();
+    void update();
+    void render();
+    void handlePlayerInput(sf::Keyboard::Key key);
+
+private:
+    sf::RenderWindow window_;
+    sf::Texture backgroundTile_;
+    sf::Sprite background_;
+    Worm player_;
+    unsigned score_;    // TODO: Track and display score
+    bool keyReleased_;  // ensures that each key press only triggers one event
+    static constexpr unsigned windowWidth_ = 640;
+    static constexpr unsigned windowHeight_ = 480;
+    static constexpr unsigned fps_ = 60;
+};
+
+
+#endif //BATTLEWORMS_GAME_HPP
