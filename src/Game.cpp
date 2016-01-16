@@ -3,7 +3,7 @@ Project: BattleWorms
 File: Game.cpp
 Author: Joel McFadden
 Created: December 21, 2015
-Last Modified: January 14, 2016
+Last Modified: January 16, 2016
 
 Description:
     A remake of the classic game "Nibbles" with new features.
@@ -30,8 +30,7 @@ Usage Agreement:
 #include "Game.hpp"
 
 
-Game::Game() : window_(sf::VideoMode(windowWidth_, windowHeight_), "BattleWorms"), player_{}, score_{0},
-               keyReleased_{true}
+Game::Game() : window_(sf::VideoMode(windowWidth_, windowHeight_), "BattleWorms"), player_{}, score_{0}
 {
     // limit the framerate
     window_.setFramerateLimit(fps_);
@@ -62,13 +61,7 @@ void Game::processEvents()
     while (window_.pollEvent(event)) {
         switch (event.type) {
             case sf::Event::KeyPressed:
-                if (keyReleased_) {
-                    keyReleased_ = false;
-                    handlePlayerInput(event.key.code);
-                }
-                break;
-            case sf::Event::KeyReleased:
-                keyReleased_ = true;
+                handlePlayerInput(event.key.code);
                 break;
             case sf::Event::Closed:
                 window_.close();
