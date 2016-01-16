@@ -3,7 +3,7 @@ Project: BattleWorms
 File: Worm.hpp
 Author: Joel McFadden
 Created: January 14, 2016
-Last Modified: January 14, 2016
+Last Modified: January 16, 2016
 
 Description:
     A remake of the classic game "Nibbles" with new features.
@@ -54,7 +54,7 @@ private:
 private:
     using SegPtr = std::unique_ptr<Segment>;
     std::deque<SegPtr> segments_;
-    float speed_ = 5.0;  // amount to move head and tail by each frame
+    float speed_ = 4.0;  // amount to move head and tail by each frame
     static constexpr float width_ = 10.0;
     static const sf::Color color_;
 };

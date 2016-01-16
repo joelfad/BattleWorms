@@ -3,7 +3,7 @@ Project: BattleWorms
 File: Constants.hpp
 Author: Joel McFadden
 Created: December 21, 2015
-Last Modified: January 14, 2016
+Last Modified: January 16, 2016
 
 Description:
     A remake of the classic game "Nibbles" with new features.
@@ -38,6 +38,6 @@ namespace Color {
     const sf::Color wordWhite{0xFC, 0xFC, 0xFC, 0xFF};
 }
 
-enum class Direction { right, down, left, up };
+enum class Direction { right = 0, down, left, up };
 
 #endif //BATTLEWORMS_CONSTANTS_HPP

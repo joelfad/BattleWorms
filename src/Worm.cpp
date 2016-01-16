@@ -3,7 +3,7 @@ Project: BattleWorms
 File: Worm.cpp
 Author: Joel McFadden
 Created: January 14, 2016
-Last Modified: January 14, 2016
+Last Modified: January 16, 2016
 
 Description:
     A remake of the classic game "Nibbles" with new features.
@@ -35,9 +35,9 @@ const sf::Color Worm::color_ = Color::wormYellow;
 Worm::Worm()
 {
     // create first worm segment
-    constexpr float posX = 300.0;  // arbitrary starting position
-    constexpr float posY = 300.0;
-    segments_.push_front(std::make_unique<Segment>(Segment(posX, posY, Direction::left)));
+    constexpr float posX = 0.0;     // arbitrary starting position
+    constexpr float posY = 200.0;
+    segments_.push_front(std::make_unique<Segment>(Segment(posX, posY, Direction::right)));
     segments_.front()->setSize(sf::Vector2f(20 * width_, width_));
 }
 
@@ -47,6 +47,9 @@ Worm::Segment::Segment(float startX, float startY, Direction dir) : dir_{dir}
     setPosition(startX, startY);
     setSize(sf::Vector2f(Worm::width_, Worm::width_));
     setFillColor(Worm::color_);
+
+    // set orientation (rotate CCW)
+    setRotation(static_cast<int>(dir) * 90);
 }
 
 void Worm::Segment::move(float offset)
@@ -75,10 +78,8 @@ void Worm::Segment::resize(float amount)
 void Worm::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
     // draw each segment of the worm
-    for (auto& s : segments_) {
-        s->setRotation(static_cast<int>(s->dir_) * 90);
+    for (auto& s : segments_)
         target.draw(*s, states);
-    }
 }
 
 void Worm::changeDirection(Direction dir)
