@@ -38,6 +38,7 @@ class Game {
 public:
     Game();
     void run();
+    void end();
     const sf::RenderWindow& getWindow() const;
 
 private:
@@ -45,16 +46,21 @@ private:
     void update();
     void render();
     void handlePlayerInput(sf::Keyboard::Key key);
+    bool isRunning();
+
+private:
+    enum class State { running, paused, quit, lost, won };
+    static constexpr unsigned windowWidth_ = 1024;
+    static constexpr unsigned windowHeight_ = 768;
+    static constexpr unsigned fps_ = 60;
 
 private:
     sf::RenderWindow window_;
     sf::Texture backgroundTile_;
     sf::Sprite background_;
     Worm player_;
+    State state_;
     unsigned score_;    // TODO: Track and display score
-    static constexpr unsigned windowWidth_ = 1024;
-    static constexpr unsigned windowHeight_ = 768;
-    static constexpr unsigned fps_ = 60;
 };
 
 

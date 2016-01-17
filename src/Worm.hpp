@@ -43,6 +43,7 @@ public:
     void changeDirection(Direction dir);
     void move();
     void wrap();
+    bool collisionSelf();
     // TODO: Document functions
 
 private:

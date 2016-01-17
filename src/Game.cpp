@@ -3,7 +3,7 @@ Project: BattleWorms
 File: Game.cpp
 Author: Joel McFadden
 Created: December 21, 2015
-Last Modified: January 16, 2016
+Last Modified: January 17, 2016
 
 Description:
     A remake of the classic game "Nibbles" with new features.
@@ -30,7 +30,8 @@ Usage Agreement:
 #include "Game.hpp"
 
 
-Game::Game() : window_(sf::VideoMode(windowWidth_, windowHeight_), "BattleWorms"), player_{*this}, score_{0}
+Game::Game() : window_(sf::VideoMode(windowWidth_, windowHeight_), "BattleWorms"),
+               player_{*this}, state_{State::running}, score_{0}
 {
     // limit the framerate
     window_.setFramerateLimit(fps_);
@@ -48,11 +49,17 @@ Game::Game() : window_(sf::VideoMode(windowWidth_, windowHeight_), "BattleWorms"
 void Game::run()
 {
     // one iteration of this loop is a single frame (or tick)
-    while (window_.isOpen()) {
+    while (window_.isOpen() && isRunning()) {
         processEvents();
         update();
         render();
     }
+}
+
+void Game::end()
+{
+    while (window_.isOpen())    // TODO: Replace with handling
+        processEvents();        //       different game endings
 }
 
 const sf::RenderWindow& Game::getWindow() const
@@ -78,6 +85,8 @@ void Game::processEvents()
 inline void Game::update()
 {
     player_.move();
+    if (player_.collisionSelf())
+        state_ = State::lost;
 }
 
 void Game::render()
@@ -104,4 +113,9 @@ void Game::handlePlayerInput(sf::Keyboard::Key key)
             player_.changeDirection(Direction::left);
             break;
     }
+}
+
+inline bool Game::isRunning()
+{
+    return state_ == State::running;
 }

@@ -39,7 +39,7 @@ Worm::Worm(Game& game) : game_(game)
     constexpr float posX = 0.0;     // arbitrary starting position
     constexpr float posY = 200.0;
     constexpr float startingLength = 20 * width_;
-    segments_.push_front(std::make_unique<Segment>(Segment(*this, posX, posY, Direction::right, startingLength)));
+    segments_.push_front(std::make_unique<Segment>(*this, posX, posY, Direction::right, startingLength));
 }
 
 Worm::Segment::Segment(Worm& worm, float startX, float startY, Direction dir, float length)
@@ -164,7 +164,7 @@ void Worm::changeDirection(Direction dir)
     }
 
     s.resize(-width_);  // create space for new square segment
-    segments_.push_front(std::make_unique<Segment>(Segment(*this, newX, newY, dir)));
+    segments_.push_front(std::make_unique<Segment>(*this, newX, newY, dir));
 }
 
 void Worm::move()
@@ -218,5 +218,17 @@ void Worm::wrap()
             break;
     }
 
-    segments_.push_front(std::make_unique<Segment>(Segment(*this, newX, newY, s.dir_, speed_)));
+    segments_.push_front(std::make_unique<Segment>(*this, newX, newY, s.dir_, speed_));
+}
+
+bool Worm::collisionSelf()
+{
+    Segment* head = segments_.front().get();
+    for (auto& s : segments_) {
+        sf::FloatRect i;    // intersection area - required because of floating point inaccuracy
+        if (s.get() != head && head->getGlobalBounds().intersects(s->getGlobalBounds(), i) &&
+                (i.height > 0.1 && i.width > 0.1))
+            return true;
+    }
+    return false;
 }

@@ -3,7 +3,7 @@ Project: BattleWorms
 File: main.cpp
 Author: Joel McFadden
 Created: December 20, 2015
-Last Modified: January 14, 2016
+Last Modified: January 17, 2016
 
 Description:
     A remake of the classic game "Nibbles" with new features.
@@ -34,6 +34,7 @@ int main()
 {
     Game game;
     game.run();
+    game.end();
 
     return 0;
 }

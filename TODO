@@ -4,8 +4,8 @@ It will be updated regularly as new features are planned and implemented.
 
 Upcoming Features
 =================
-+ Add collision detection for worm body
 + Add apples to grow worm
++ Add message area
 + Track and display points
 + Add basic obstacles
 + Add a second worm that moves randomly
@@ -16,6 +16,7 @@ Upcoming Features
 
 Implemented
 ===========
+2016-01-17 - Add collision detection for worm body
 2016-01-17 - Add boundaries so worm cannot go off screen
 2016-01-14 - Control a worm with the arrow keys
 2016-01-14 - Control a rectangle with the arrow keys
