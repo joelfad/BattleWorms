@@ -27,21 +27,23 @@ Usage Agreement:
     along with BattleWorms.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <iostream>
 #include "Worm.hpp"
+#include "Game.hpp"
 
 
 const sf::Color Worm::color_ = Color::wormYellow;
 
-Worm::Worm()
+Worm::Worm(Game& game) : game_(game)
 {
     // create first worm segment
     constexpr float posX = 0.0;     // arbitrary starting position
     constexpr float posY = 200.0;
-    segments_.push_front(std::make_unique<Segment>(Segment(posX, posY, Direction::right)));
+    segments_.push_front(std::make_unique<Segment>(Segment(*this, posX, posY, Direction::right)));
     segments_.front()->setSize(sf::Vector2f(20 * width_, width_));
 }
 
-Worm::Segment::Segment(float startX, float startY, Direction dir) : dir_{dir}
+Worm::Segment::Segment(Worm& worm, float startX, float startY, Direction dir) : worm_(worm), dir_{dir}
 {
     // set initial position, size, and color
     setPosition(startX, startY);
@@ -70,9 +72,23 @@ void Worm::Segment::move(float offset)
     }
 }
 
-void Worm::Segment::resize(float amount)
+inline void Worm::Segment::resize(float amount)
 {
     setSize(sf::Vector2f(getSize().x + amount, getSize().y));
+}
+
+bool Worm::Segment::isOutOfBounds()
+{
+    switch (dir_) {
+        case Direction::right:
+            return getPosition().x + getSize().x > worm_.game_.getWindow().getSize().x;
+        case Direction::down:
+            return getPosition().y + getSize().x > worm_.game_.getWindow().getSize().y;
+        case Direction::left:
+            return getPosition().x - getSize().x < 0.0;
+        case Direction::up:
+            return getPosition().y - getSize().x < 0.0;
+    }
 }
 
 void Worm::draw(sf::RenderTarget& target, sf::RenderStates states) const
@@ -146,7 +162,7 @@ void Worm::changeDirection(Direction dir)
     }
 
     s.resize(-width_);  // create space for new square segment
-    segments_.push_front(std::make_unique<Segment>(Segment(newX, newY, dir)));
+    segments_.push_front(std::make_unique<Segment>(Segment(*this, newX, newY, dir)));
 }
 
 void Worm::move()
@@ -158,6 +174,10 @@ void Worm::move()
     head.resize(speed_);
     tail.resize(-speed_);
     tail.move(speed_);
+
+    // wrap worm if it attempts to cross a display boundary
+    if (head.isOutOfBounds())
+        head.move(-100);
 
     // destroy tail if it becomes too small
     if (tail.getSize().x <= 0.0)

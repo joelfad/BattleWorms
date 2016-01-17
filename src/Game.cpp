@@ -30,7 +30,7 @@ Usage Agreement:
 #include "Game.hpp"
 
 
-Game::Game() : window_(sf::VideoMode(windowWidth_, windowHeight_), "BattleWorms"), player_{}, score_{0}
+Game::Game() : window_(sf::VideoMode(windowWidth_, windowHeight_), "BattleWorms"), player_{*this}, score_{0}
 {
     // limit the framerate
     window_.setFramerateLimit(fps_);
@@ -55,6 +55,11 @@ void Game::run()
     }
 }
 
+const sf::RenderWindow& Game::getWindow() const
+{
+    return window_;
+}
+
 void Game::processEvents()
 {
     sf::Event event;
@@ -70,7 +75,7 @@ void Game::processEvents()
     }
 }
 
-void Game::update()
+inline void Game::update()
 {
     player_.move();
 }
@@ -85,7 +90,7 @@ void Game::render()
 
 void Game::handlePlayerInput(sf::Keyboard::Key key)
 {
-    switch(key) {
+    switch (key) {
         case sf::Keyboard::Up:
             player_.changeDirection(Direction::up);
             break;

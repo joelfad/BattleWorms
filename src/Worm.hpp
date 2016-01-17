@@ -34,10 +34,11 @@ Usage Agreement:
 #include <deque>
 #include "Constants.hpp"
 
+class Game;
 
 class Worm : public sf::Sprite {
 public:
-    Worm();
+    Worm(Game& game);
     void draw(sf::RenderTarget& target, sf::RenderStates states) const;
     void changeDirection(Direction dir);
     void move();
@@ -45,15 +46,18 @@ public:
 
 private:
     struct Segment : public sf::RectangleShape {
-        Segment(float startX, float startY, Direction dir);
+        Segment(Worm& worm, float startX, float startY, Direction dir);
         void move(float offset);
         void resize(float amount);
+        bool isOutOfBounds();
+        Worm& worm_;
         Direction dir_;
     };
 
 private:
     using SegPtr = std::unique_ptr<Segment>;
     std::deque<SegPtr> segments_;
+    Game& game_;
     float speed_ = 4.0;  // amount to move head and tail by each frame
     static constexpr float width_ = 10.0;
     static const sf::Color color_;

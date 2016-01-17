@@ -38,6 +38,7 @@ class Game {
 public:
     Game();
     void run();
+    const sf::RenderWindow& getWindow() const;
 
 private:
     void processEvents();
