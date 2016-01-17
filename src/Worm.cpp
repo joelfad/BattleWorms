@@ -3,7 +3,7 @@ Project: BattleWorms
 File: Worm.cpp
 Author: Joel McFadden
 Created: January 14, 2016
-Last Modified: January 16, 2016
+Last Modified: January 17, 2016
 
 Description:
     A remake of the classic game "Nibbles" with new features.
@@ -185,8 +185,13 @@ void Worm::move()
     tail.move(speed_);
 
     // destroy tail if it becomes too small
-    if (tail.getSize().x <= 0.0)
-        segments_.pop_back();
+    float len = tail.getSize().x;   // get length of tail (may be negative)
+    if (len <= 0.0) {
+        segments_.pop_back();       // remove tail
+        Segment& newTail = *segments_.back();
+        newTail.resize(len);        // shrink and move new tail
+        newTail.move(-len);
+    }
 }
 
 void Worm::wrap()

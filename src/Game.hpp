@@ -3,7 +3,7 @@ Project: BattleWorms
 File: Game.hpp
 Author: Joel McFadden
 Created: December 21, 2015
-Last Modified: January 16, 2016
+Last Modified: January 17, 2016
 
 Description:
     A remake of the classic game "Nibbles" with new features.
@@ -52,8 +52,8 @@ private:
     sf::Sprite background_;
     Worm player_;
     unsigned score_;    // TODO: Track and display score
-    static constexpr unsigned windowWidth_ = 640;
-    static constexpr unsigned windowHeight_ = 480;
+    static constexpr unsigned windowWidth_ = 1024;
+    static constexpr unsigned windowHeight_ = 768;
     static constexpr unsigned fps_ = 60;
 };
 

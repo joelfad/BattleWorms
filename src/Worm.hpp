@@ -3,7 +3,7 @@ Project: BattleWorms
 File: Worm.hpp
 Author: Joel McFadden
 Created: January 14, 2016
-Last Modified: January 16, 2016
+Last Modified: January 17, 2016
 
 Description:
     A remake of the classic game "Nibbles" with new features.
