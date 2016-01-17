@@ -42,11 +42,12 @@ public:
     void draw(sf::RenderTarget& target, sf::RenderStates states) const;
     void changeDirection(Direction dir);
     void move();
+    void wrap();
     // TODO: Document functions
 
 private:
     struct Segment : public sf::RectangleShape {
-        Segment(Worm& worm, float startX, float startY, Direction dir);
+        Segment(Worm& worm, float startX, float startY, Direction dir, float length = width_);
         void move(float offset);
         void resize(float amount);
         bool isOutOfBounds();

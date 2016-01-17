@@ -27,7 +27,6 @@ Usage Agreement:
     along with BattleWorms.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <iostream>
 #include "Worm.hpp"
 #include "Game.hpp"
 
@@ -39,15 +38,16 @@ Worm::Worm(Game& game) : game_(game)
     // create first worm segment
     constexpr float posX = 0.0;     // arbitrary starting position
     constexpr float posY = 200.0;
-    segments_.push_front(std::make_unique<Segment>(Segment(*this, posX, posY, Direction::right)));
-    segments_.front()->setSize(sf::Vector2f(20 * width_, width_));
+    constexpr float startingLength = 20 * width_;
+    segments_.push_front(std::make_unique<Segment>(Segment(*this, posX, posY, Direction::right, startingLength)));
 }
 
-Worm::Segment::Segment(Worm& worm, float startX, float startY, Direction dir) : worm_(worm), dir_{dir}
+Worm::Segment::Segment(Worm& worm, float startX, float startY, Direction dir, float length)
+        : worm_(worm), dir_{dir}
 {
     // set initial position, size, and color
     setPosition(startX, startY);
-    setSize(sf::Vector2f(Worm::width_, Worm::width_));
+    setSize(sf::Vector2f(length, Worm::width_));
     setFillColor(Worm::color_);
 
     // set orientation (rotate CCW)
@@ -79,15 +79,17 @@ inline void Worm::Segment::resize(float amount)
 
 bool Worm::Segment::isOutOfBounds()
 {
+    float newLength = getSize().x + worm_.speed_;
+
     switch (dir_) {
         case Direction::right:
-            return getPosition().x + getSize().x > worm_.game_.getWindow().getSize().x;
+            return getPosition().x + newLength > worm_.game_.getWindow().getSize().x;
         case Direction::down:
-            return getPosition().y + getSize().x > worm_.game_.getWindow().getSize().y;
+            return getPosition().y + newLength > worm_.game_.getWindow().getSize().y;
         case Direction::left:
-            return getPosition().x - getSize().x < 0.0;
+            return getPosition().x - newLength < 0.0;
         case Direction::up:
-            return getPosition().y - getSize().x < 0.0;
+            return getPosition().y - newLength < 0.0;
     }
 }
 
@@ -170,16 +172,46 @@ void Worm::move()
     Segment& head = *segments_.front();
     Segment& tail = *segments_.back();
 
-    // move head and tail segments
-    head.resize(speed_);
+    // grow head segment
+    if (!head.isOutOfBounds())
+        head.resize(speed_);
+    else {
+    // wrap worm if it attempts to cross a display boundary
+        wrap();
+    }
+
+    // shrink and move tail segment
     tail.resize(-speed_);
     tail.move(speed_);
-
-    // wrap worm if it attempts to cross a display boundary
-    if (head.isOutOfBounds())
-        head.move(-100);
 
     // destroy tail if it becomes too small
     if (tail.getSize().x <= 0.0)
         segments_.pop_back();
+}
+
+void Worm::wrap()
+{
+    Segment& s = *segments_.front();
+
+    float posX = s.getPosition().x;
+    float posY = s.getPosition().y;
+    float newX = posX;
+    float newY = posY;
+
+    switch (s.dir_) {
+        case Direction::right:
+            newX = 0.0;
+            break;
+        case Direction::down:
+            newY = 0.0;
+            break;
+        case Direction::left:
+            newX = game_.getWindow().getSize().x;
+            break;
+        case Direction::up:
+            newY = game_.getWindow().getSize().y;
+            break;
+    }
+
+    segments_.push_front(std::make_unique<Segment>(Segment(*this, newX, newY, s.dir_, speed_)));
 }
