@@ -36,6 +36,7 @@ Usage Agreement:
 
 class Game;
 
+// TODO: Add documentation to member functions
 class Worm : public sf::Sprite {
 public:
     Worm(Game& game);
@@ -44,7 +45,6 @@ public:
     void move();
     void wrap();
     bool collisionSelf();
-    // TODO: Document functions
 
 private:
     struct Segment : public sf::RectangleShape {

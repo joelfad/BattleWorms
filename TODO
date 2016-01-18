@@ -4,14 +4,14 @@ It will be updated regularly as new features are planned and implemented.
 
 Upcoming Features
 =================
-+ Add apples to grow worm
++ Add items to grow worm
++ Add basic obstacles
 + Add message area
 + Track and display points
-+ Add basic obstacles
 + Add a second worm that moves randomly
 + Give second worm basic intelligence to avoid obstacles
-+ Animate apples
-+ Enable apples to move around autonomously
++ Animate items
++ Enable items to move around autonomously
 
 
 Implemented

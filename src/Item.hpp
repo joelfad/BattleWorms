@@ -1,8 +1,8 @@
 /*
 Project: BattleWorms
-File: Game.hpp
+File: Item.hpp
 Author: Joel McFadden
-Created: December 21, 2015
+Created: January 17, 2016
 Last Modified: January 17, 2016
 
 Description:
@@ -27,46 +27,24 @@ Usage Agreement:
     along with BattleWorms.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef BATTLEWORMS_GAME_HPP
-#define BATTLEWORMS_GAME_HPP
+#ifndef BATTLEWORMS_ITEM_HPP
+#define BATTLEWORMS_ITEM_HPP
 
-#include <list>
 #include <SFML/Graphics.hpp>
-#include "Worm.hpp"
-#include "Item.hpp"
 
 
 // TODO: Add documentation to member functions
-class Game {
+class Item : public sf::Sprite {
 public:
-    Game();
-    void run();
-    void end();
-    const sf::RenderWindow& getWindow() const;
+    enum class Type { grow, accelerate };
+    Item(Type type, float val, float x, float y, const std::string& filename);
 
 private:
-    void processEvents();
-    void update();
-    void render();
-    void handlePlayerInput(sf::Keyboard::Key key);
-    bool isRunning();
-
-private:
-    enum class State { running, paused, quit, lost, won };
-    static constexpr unsigned windowWidth_ = 1024;
-    static constexpr unsigned windowHeight_ = 768;
-    static constexpr unsigned fps_ = 60;
-
-private:
-    sf::RenderWindow window_;
-    sf::Texture backgroundTile_;
-    sf::Sprite background_;
-    Worm player_;
-    using ItemPtr = std::unique_ptr<Item>;
-    std::list<ItemPtr> items_;
-    State state_;
-    unsigned score_;    // TODO: Track and display score
+    sf::Texture texture_;
+    Type type_;         // property the item affects
+    float value_;       // amount to adjust property by
+    unsigned points_;   // point value
 };
 
 
-#endif //BATTLEWORMS_GAME_HPP
+#endif //BATTLEWORMS_ITEM_HPP

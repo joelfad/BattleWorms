@@ -2,6 +2,7 @@
 set(SOURCE_FILES
         main.cpp
         Game.cpp
+        Item.cpp
         Worm.cpp
 )
 
