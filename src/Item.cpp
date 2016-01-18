@@ -1,8 +1,8 @@
 /*
 Project: BattleWorms
-File: main.cpp
+File: Item.cpp
 Author: Joel McFadden
-Created: December 20, 2015
+Created: January 17, 2016
 Last Modified: January 17, 2016
 
 Description:
@@ -27,14 +27,17 @@ Usage Agreement:
     along with BattleWorms.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "Game.hpp"
+#include "Item.hpp"
 
 
-int main()
+Item::Item(Type type, float val, float x, float y, const std::string& filename) : type_{type}, value_{val}
 {
-    Game game;
-    game.run();
-    game.end();
+    // load texture
+    if (!texture_.loadFromFile(filename))
+        throw new std::runtime_error("Unable to load " + filename);
+    // TODO: Set up a texture map in the game. It is inefficient to load the same texture for each new item.
+    setTexture(texture_);
 
-    return 0;
+    // set initial position
+    setPosition(x, y);
 }

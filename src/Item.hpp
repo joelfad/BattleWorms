@@ -1,8 +1,8 @@
 /*
 Project: BattleWorms
-File: main.cpp
+File: Item.hpp
 Author: Joel McFadden
-Created: December 20, 2015
+Created: January 17, 2016
 Last Modified: January 17, 2016
 
 Description:
@@ -27,14 +27,24 @@ Usage Agreement:
     along with BattleWorms.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "Game.hpp"
+#ifndef BATTLEWORMS_ITEM_HPP
+#define BATTLEWORMS_ITEM_HPP
+
+#include <SFML/Graphics.hpp>
 
 
-int main()
-{
-    Game game;
-    game.run();
-    game.end();
+// TODO: Add documentation to member functions
+class Item : public sf::Sprite {
+public:
+    enum class Type { grow, accelerate };
+    Item(Type type, float val, float x, float y, const std::string& filename);
 
-    return 0;
-}
+private:
+    sf::Texture texture_;
+    Type type_;         // property the item affects
+    float value_;       // amount to adjust property by
+    unsigned points_;   // point value
+};
+
+
+#endif //BATTLEWORMS_ITEM_HPP

@@ -3,7 +3,7 @@ Project: BattleWorms
 File: Worm.cpp
 Author: Joel McFadden
 Created: January 14, 2016
-Last Modified: January 14, 2016
+Last Modified: January 17, 2016
 
 Description:
     A remake of the classic game "Nibbles" with new features.
@@ -28,25 +28,30 @@ Usage Agreement:
 */
 
 #include "Worm.hpp"
+#include "Game.hpp"
 
 
 const sf::Color Worm::color_ = Color::wormYellow;
 
-Worm::Worm()
+Worm::Worm(Game& game) : game_(game)
 {
     // create first worm segment
-    constexpr float posX = 300.0;  // arbitrary starting position
-    constexpr float posY = 300.0;
-    segments_.push_front(std::make_unique<Segment>(Segment(posX, posY, Direction::left)));
-    segments_.front()->setSize(sf::Vector2f(20 * width_, width_));
+    constexpr float posX = 0.0;     // arbitrary starting position
+    constexpr float posY = 200.0;
+    constexpr float startingLength = 20 * width_;
+    segments_.push_front(std::make_unique<Segment>(*this, posX, posY, Direction::right, startingLength));
 }
 
-Worm::Segment::Segment(float startX, float startY, Direction dir) : dir_{dir}
+Worm::Segment::Segment(Worm& worm, float startX, float startY, Direction dir, float length)
+        : worm_(worm), dir_{dir}
 {
     // set initial position, size, and color
     setPosition(startX, startY);
-    setSize(sf::Vector2f(Worm::width_, Worm::width_));
+    setSize(sf::Vector2f(length, Worm::width_));
     setFillColor(Worm::color_);
+
+    // set orientation (rotate CCW)
+    setRotation(static_cast<int>(dir) * 90);
 }
 
 void Worm::Segment::move(float offset)
@@ -67,18 +72,32 @@ void Worm::Segment::move(float offset)
     }
 }
 
-void Worm::Segment::resize(float amount)
+inline void Worm::Segment::resize(float amount)
 {
     setSize(sf::Vector2f(getSize().x + amount, getSize().y));
+}
+
+bool Worm::Segment::isOutOfBounds()
+{
+    float newLength = getSize().x + worm_.speed_;
+
+    switch (dir_) {
+        case Direction::right:
+            return getPosition().x + newLength > worm_.game_.getWindow().getSize().x;
+        case Direction::down:
+            return getPosition().y + newLength > worm_.game_.getWindow().getSize().y;
+        case Direction::left:
+            return getPosition().x - newLength < 0.0;
+        case Direction::up:
+            return getPosition().y - newLength < 0.0;
+    }
 }
 
 void Worm::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
     // draw each segment of the worm
-    for (auto& s : segments_) {
-        s->setRotation(static_cast<int>(s->dir_) * 90);
+    for (auto& s : segments_)
         target.draw(*s, states);
-    }
 }
 
 void Worm::changeDirection(Direction dir)
@@ -145,7 +164,7 @@ void Worm::changeDirection(Direction dir)
     }
 
     s.resize(-width_);  // create space for new square segment
-    segments_.push_front(std::make_unique<Segment>(Segment(newX, newY, dir)));
+    segments_.push_front(std::make_unique<Segment>(*this, newX, newY, dir));
 }
 
 void Worm::move()
@@ -153,12 +172,63 @@ void Worm::move()
     Segment& head = *segments_.front();
     Segment& tail = *segments_.back();
 
-    // move head and tail segments
-    head.resize(speed_);
+    // grow head segment
+    if (!head.isOutOfBounds())
+        head.resize(speed_);
+    else {
+    // wrap worm if it attempts to cross a display boundary
+        wrap();
+    }
+
+    // shrink and move tail segment
     tail.resize(-speed_);
     tail.move(speed_);
 
     // destroy tail if it becomes too small
-    if (tail.getSize().x <= 0.0)
-        segments_.pop_back();
+    float len = tail.getSize().x;   // get length of tail (may be negative)
+    if (len <= 0.0) {
+        segments_.pop_back();       // remove tail
+        Segment& newTail = *segments_.back();
+        newTail.resize(len);        // shrink and move new tail
+        newTail.move(-len);
+    }
+}
+
+void Worm::wrap()
+{
+    Segment& s = *segments_.front();
+
+    float posX = s.getPosition().x;
+    float posY = s.getPosition().y;
+    float newX = posX;
+    float newY = posY;
+
+    switch (s.dir_) {
+        case Direction::right:
+            newX = 0.0;
+            break;
+        case Direction::down:
+            newY = 0.0;
+            break;
+        case Direction::left:
+            newX = game_.getWindow().getSize().x;
+            break;
+        case Direction::up:
+            newY = game_.getWindow().getSize().y;
+            break;
+    }
+
+    segments_.push_front(std::make_unique<Segment>(*this, newX, newY, s.dir_, speed_));
+}
+
+bool Worm::collisionSelf()
+{
+    Segment* head = segments_.front().get();
+    for (auto& s : segments_) {
+        sf::FloatRect i;    // intersection area - required because of floating point inaccuracy
+        if (s.get() != head && head->getGlobalBounds().intersects(s->getGlobalBounds(), i) &&
+                (i.height > 0.1 && i.width > 0.1))
+            return true;
+    }
+    return false;
 }

@@ -3,7 +3,7 @@ Project: BattleWorms
 File: Worm.hpp
 Author: Joel McFadden
 Created: January 14, 2016
-Last Modified: January 14, 2016
+Last Modified: January 17, 2016
 
 Description:
     A remake of the classic game "Nibbles" with new features.
@@ -34,27 +34,33 @@ Usage Agreement:
 #include <deque>
 #include "Constants.hpp"
 
+class Game;
 
+// TODO: Add documentation to member functions
 class Worm : public sf::Sprite {
 public:
-    Worm();
+    Worm(Game& game);
     void draw(sf::RenderTarget& target, sf::RenderStates states) const;
     void changeDirection(Direction dir);
     void move();
-    // TODO: Document functions
+    void wrap();
+    bool collisionSelf();
 
 private:
     struct Segment : public sf::RectangleShape {
-        Segment(float startX, float startY, Direction dir);
+        Segment(Worm& worm, float startX, float startY, Direction dir, float length = width_);
         void move(float offset);
         void resize(float amount);
+        bool isOutOfBounds();
+        Worm& worm_;
         Direction dir_;
     };
 
 private:
     using SegPtr = std::unique_ptr<Segment>;
     std::deque<SegPtr> segments_;
-    float speed_ = 5.0;  // amount to move head and tail by each frame
+    Game& game_;
+    float speed_ = 4.0;  // amount to move head and tail by each frame
     static constexpr float width_ = 10.0;
     static const sf::Color color_;
 };
