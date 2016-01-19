@@ -3,7 +3,7 @@ Project: BattleWorms
 File: Game.cpp
 Author: Joel McFadden
 Created: December 21, 2015
-Last Modified: January 17, 2016
+Last Modified: January 18, 2016
 
 Description:
     A remake of the classic game "Nibbles" with new features.
@@ -78,11 +78,16 @@ const sf::RenderWindow& Game::getWindow() const
 void Game::processEvents()
 {
     sf::Event event;
+    // check for any new events
     while (window_.pollEvent(event)) {
         switch (event.type) {
+
+            // user presses a key
             case sf::Event::KeyPressed:
                 handlePlayerInput(event.key.code);
                 break;
+
+            // user closes the window
             case sf::Event::Closed:
                 window_.close();
                 break;
@@ -92,7 +97,10 @@ void Game::processEvents()
 
 inline void Game::update()
 {
+    // move worm
     player_.move();
+
+    // check if worm hits itself
     if (player_.collisionSelf())
         state_ = State::lost;
 }
@@ -100,16 +108,24 @@ inline void Game::update()
 void Game::render()
 {
     window_.clear();
+
+    // render background
     window_.draw(background_);
+
+    // render items
     for (auto& i : items_)
         window_.draw(*i);
+
+    // render player (worm)
     window_.draw(player_);
+
     window_.display();
 }
 
 void Game::handlePlayerInput(sf::Keyboard::Key key)
 {
     switch (key) {
+        // attempt to change worm's direction
         case sf::Keyboard::Up:
             player_.changeDirection(Direction::up);
             break;

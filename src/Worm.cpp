@@ -3,7 +3,7 @@ Project: BattleWorms
 File: Worm.cpp
 Author: Joel McFadden
 Created: January 14, 2016
-Last Modified: January 17, 2016
+Last Modified: January 18, 2016
 
 Description:
     A remake of the classic game "Nibbles" with new features.
@@ -33,13 +33,10 @@ Usage Agreement:
 
 const sf::Color Worm::color_ = Color::wormYellow;
 
-Worm::Worm(Game& game) : game_(game)
+Worm::Worm(Game& game, float startX, float startY, float startLen) : game_(game)
 {
     // create first worm segment
-    constexpr float posX = 0.0;     // arbitrary starting position
-    constexpr float posY = 200.0;
-    constexpr float startingLength = 20 * width_;
-    segments_.push_front(std::make_unique<Segment>(*this, posX, posY, Direction::right, startingLength));
+    segments_.push_front(std::make_unique<Segment>(*this, startX, startY, Direction::right, startLen));
 }
 
 Worm::Segment::Segment(Worm& worm, float startX, float startY, Direction dir, float length)
@@ -204,16 +201,16 @@ void Worm::wrap()
     float newY = posY;
 
     switch (s.dir_) {
-        case Direction::right:
+        case Direction::right:  // new segment on left
             newX = 0.0;
             break;
-        case Direction::down:
+        case Direction::down:   // new segment at top
             newY = 0.0;
             break;
-        case Direction::left:
+        case Direction::left:   // new segment on right
             newX = game_.getWindow().getSize().x;
             break;
-        case Direction::up:
+        case Direction::up:     // new segment at bottom
             newY = game_.getWindow().getSize().y;
             break;
     }

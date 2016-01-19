@@ -3,7 +3,7 @@ Project: BattleWorms
 File: Game.hpp
 Author: Joel McFadden
 Created: December 21, 2015
-Last Modified: January 17, 2016
+Last Modified: January 18, 2016
 
 Description:
     A remake of the classic game "Nibbles" with new features.
@@ -36,20 +36,36 @@ Usage Agreement:
 #include "Item.hpp"
 
 
-// TODO: Add documentation to member functions
 class Game {
 public:
     Game();
+    /* Create and initialize a new game */
+
     void run();
+    /* Main game loop - play the game */
+
     void end();
+    /* Game Over loop - wait for user to close window */
+
     const sf::RenderWindow& getWindow() const;
+    /* Return: game display window */
 
 private:
     void processEvents();
+    /* Respond to user interaction with game display window */
+
     void update();
+    /* Handle game logic during frame */
+
     void render();
+    /* Draw frame on display window (i.e. draw background, worm, items, etc.) */
+
     void handlePlayerInput(sf::Keyboard::Key key);
+    /* Respond to user pressing a key */
+
     bool isRunning();
+    /* Check if game is running */
+    // Return: true if game is running, false otherwise
 
 private:
     enum class State { running, paused, quit, lost, won };
@@ -58,13 +74,13 @@ private:
     static constexpr unsigned fps_ = 60;
 
 private:
-    sf::RenderWindow window_;
-    sf::Texture backgroundTile_;
-    sf::Sprite background_;
-    Worm player_;
+    sf::RenderWindow window_;       // game display window
+    sf::Texture backgroundTile_;    // a single seamless background tile
+    sf::Sprite background_;         // entire background
+    Worm player_;                   // worm controlled by player
     using ItemPtr = std::unique_ptr<Item>;
-    std::list<ItemPtr> items_;
-    State state_;
+    std::list<ItemPtr> items_;      // game items
+    State state_;                   // game state
     unsigned score_;    // TODO: Track and display score
 };
 

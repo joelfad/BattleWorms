@@ -3,7 +3,7 @@ Project: BattleWorms
 File: Item.hpp
 Author: Joel McFadden
 Created: January 17, 2016
-Last Modified: January 17, 2016
+Last Modified: January 18, 2016
 
 Description:
     A remake of the classic game "Nibbles" with new features.
@@ -33,14 +33,16 @@ Usage Agreement:
 #include <SFML/Graphics.hpp>
 
 
-// TODO: Add documentation to member functions
 class Item : public sf::Sprite {
 public:
-    enum class Type { grow, accelerate };
+    enum class Type { grow, accelerate };   // effect item has on worms
+
+public:
     Item(Type type, float val, float x, float y, const std::string& filename);
+    /* Create a new item with specified type, value, coordinates, and image */
 
 private:
-    sf::Texture texture_;
+    sf::Texture texture_;   // TODO: Refactor this out
     Type type_;         // property the item affects
     float value_;       // amount to adjust property by
     unsigned points_;   // point value
